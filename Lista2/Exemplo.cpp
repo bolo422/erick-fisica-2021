@@ -27,40 +27,11 @@ private:
 
 	bool setupPlayer = false;
 	b2Body* player;
-	
+	int playerJumps;
 
 
 public:
 	MyTest() {
-		bool exercicio7 = false;
-		if (exercicio7) {
-			// Left Wall
-			b2BodyDef WallLeftBodyDef;
-			WallLeftBodyDef.position.Set(-70.0f, 28.0f);
-			b2Body* WallLeftBody = m_world->CreateBody(&WallLeftBodyDef);
-			b2PolygonShape WallLeftBox;
-			WallLeftBox.SetAsBox(1.0f, 50.0f);
-			WallLeftBody->CreateFixture(&WallLeftBox, 0.0f);
-
-			// Right Wall
-			b2BodyDef WallRightBodyDef;
-			WallRightBodyDef.position.Set(70.0f, 28.0f);
-			b2Body* WallRightBody = m_world->CreateBody(&WallRightBodyDef);
-			b2PolygonShape WallRightBox;
-			WallRightBox.SetAsBox(1.0f, 50.0f);
-			WallRightBody->CreateFixture(&WallRightBox, 0.0f);
-
-			// Roof
-			b2BodyDef RoofBodyDef;
-			RoofBodyDef.position.Set(0.0f, 77.0f);
-			b2Body* RoofBody = m_world->CreateBody(&RoofBodyDef);
-			b2PolygonShape RoofBox;
-			RoofBox.SetAsBox(70.0f, 1.0f);
-			RoofBody->CreateFixture(&RoofBox, 0.0f);
-		}
-		/////////
-
-		
 		bool criarParedes = true;
 		if (criarParedes) {
 
@@ -75,9 +46,6 @@ public:
 			b2Body* edge3 = createEdge(*id, *ie);
 			b2Body* edge4 = createEdge(*ie, *sd);
 		}
-		/////////////
-
-
 	}
 
 	void Step(Settings& settings) override
@@ -96,6 +64,11 @@ public:
 		message = "Force = " + to_string(int(globalForce));
 		g_debugDraw.DrawString(5, m_textLine, message.c_str());
 		m_textLine += 15;
+
+		if (setupPlayer && player->GetPosition().y < -46.984f)
+		{
+			playerJumps = 2;
+		}
 	}
 
 	static Test* Create()  //a classe Test que instancia um objeto da sua nova classe
@@ -168,6 +141,7 @@ public:
 		body->CreateFixture(&fixtureDef);
 		return body;
 	}
+
 
 	b2Body* createDiamond(float posX, float posY, float scaleFactor)
 	{
@@ -285,6 +259,7 @@ public:
 		return novoObjeto;
 	}
 
+
 	void Keyboard(int key) override
 	{
 
@@ -331,6 +306,7 @@ public:
 			}
 			break;
 
+
 		case GLFW_KEY_V:
 			if (key == GLFW_KEY_V) {
 				b2Vec2* boxPos = new b2Vec2(0, 0);
@@ -353,6 +329,7 @@ public:
 				b2Body* box = createBox(*boxPos, *boxDim, *boxlinearVelocity, boxGravity, boxDensity, boxFriction, boxRestitution, boxIsDynamic);
 			}
 			break;
+
 
 		case GLFW_KEY_G:
 			if (key == GLFW_KEY_G) {
@@ -543,11 +520,10 @@ public:
 			}
 			break;
 
-			//LISTA 2 - EXERCÍCIO 2
 		case GLFW_KEY_KP_7:
 			if (key == GLFW_KEY_KP_7) {
 				b2Vec2* boxPos = new b2Vec2(0, -40);
-				b2Vec2* boxDim = new b2Vec2(2, 6);
+				b2Vec2* boxDim = new b2Vec2(3, 3);
 				b2Vec2* boxlinearVelocity = new b2Vec2(0, 0);
 				float boxGravity = 10;
 				float boxDensity = 1;
@@ -555,23 +531,26 @@ public:
 				float boxRestitution = 0;
 
 				player = createBox(*boxPos, *boxDim, *boxlinearVelocity, boxGravity, boxDensity, boxFriction, boxRestitution, true);
+				playerJumps = 2;
 				setupPlayer = true;
 			}
 			break;
 
 		case GLFW_KEY_KP_0:
 			if (key == GLFW_KEY_KP_0 && setupPlayer) {
-
-				b2Vec2 force = decomposeVector(90.0f, 3000.0f);
-				player->ApplyLinearImpulse(force, player->GetWorldCenter(), true);
-
+				std::cout << player->GetPosition().y << std::endl;
+				if (playerJumps > 0) {
+					b2Vec2 force = decomposeVector(90.0f, 1500.0f);
+					player->ApplyLinearImpulse(force, player->GetWorldCenter(), true);
+					playerJumps--;
+				}
 			}
 			break;
 
 		case GLFW_KEY_KP_6:
 			if (key == GLFW_KEY_KP_6 && setupPlayer) {
 
-				b2Vec2 force = decomposeVector(0.0f, 500.0f);
+				b2Vec2 force = decomposeVector(45.0f, 500.0f);
 				player->ApplyLinearImpulse(force, player->GetWorldCenter(), true);
 
 			}
