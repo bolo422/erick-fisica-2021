@@ -1,4 +1,4 @@
-# Lista 3
+# Lista 2
 
 Os três exercícios estão na função Keyboard, atalhos:
 
