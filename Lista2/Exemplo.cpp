@@ -24,6 +24,9 @@ private:
 	b2Vec2 globalPointDomino;
 	
 	float globalForce = 300, globalAngle = 45;
+
+	bool setupPlayer = false;
+	b2Body* player;
 	
 
 
@@ -127,28 +130,6 @@ public:
 		return body;
 	}
 
-	b2Body* createRectangle(b2Vec2 pos, float length, float width, b2Vec2 linearVelocity, float grav, float density, float friction, float restitution, bool isDynamic)
-	{
-		b2BodyDef bodyDef;
-		bodyDef.linearVelocity.Set(linearVelocity.x, linearVelocity.y);
-		bodyDef.gravityScale = grav;
-
-		if (isDynamic)	bodyDef.type = b2_dynamicBody;
-		else			bodyDef.type = b2_staticBody;
-
-		bodyDef.position.Set(pos.x, pos.y);
-		b2Body* body = m_world->CreateBody(&bodyDef);
-
-		b2PolygonShape dynamicBox;
-		dynamicBox.SetAsBox(length, width);
-		b2FixtureDef fixtureDef;
-		fixtureDef.shape = &dynamicBox;
-		fixtureDef.density = density;
-		fixtureDef.friction = friction;
-		fixtureDef.restitution = restitution;
-		body->CreateFixture(&fixtureDef);
-		return body;
-	}
 
 	// EXERCÍCIO 6 - Círculo
 	b2Body* createCircle(b2Vec2 pos, float radius, b2Vec2 linearVelocity, float grav, float density, float friction, float restitution, bool isDynamic)
@@ -481,20 +462,20 @@ public:
 				if (!dominoCriado) {
 					for (size_t i = 0; i < 10; i++)
 					{
-						b2Vec2* recPos = new b2Vec2((i * 7.5) - 40, -20);
-						float recLength = 1.5;
-						float recWidth = 6.0;
-						b2Vec2* recLinearVelocity = new b2Vec2(0, 0);
-						float recGravity = 10;
-						float recDensity = 1;
-						float recFriction = 0.2;
-						float recRestitution = 0;
+						b2Vec2* boxPos = new b2Vec2((i * 7.5) - 40, -20);
+						b2Vec2* boxDim = new b2Vec2(1.5, 6.0);
+						b2Vec2* boxLinearVelocity = new b2Vec2(0, 0);
+						float boxGravity = 10;
+						float boxDensity = 1;
+						float boxFriction = 0.2;
+						float boxRestitution = 0;
 
-						b2Body* rectangle = createRectangle(*recPos, recLength, recWidth, *recLinearVelocity, recGravity, recDensity, recFriction, recRestitution, true);
+						b2Body* box = createBox(*boxPos, *boxDim, *boxLinearVelocity, boxGravity, boxDensity, boxFriction, boxRestitution, true);
 
 						if (primeiroDomino == NULL) {
-							primeiroDomino = rectangle;
-							globalPointDomino = b2Vec2(recLength * -1, recWidth);
+							primeiroDomino = box;
+							globalPointDomino = *boxDim;
+							globalPointDomino.x = globalPointDomino.x * -1;
 						}
 
 					}
@@ -569,7 +550,51 @@ public:
 				std::cout << globalForce << std::endl;
 			}
 			break;
+
+		case GLFW_KEY_KP_7:
+			if (key == GLFW_KEY_KP_7) {
+				b2Vec2* boxPos = new b2Vec2(0, -40);
+				b2Vec2* boxDim = new b2Vec2(2, 6);
+				b2Vec2* boxlinearVelocity = new b2Vec2(0, 0);
+				float boxGravity = 10;
+				float boxDensity = 1;
+				float boxFriction = 1;
+				float boxRestitution = 0;
+
+				player = createBox(*boxPos, *boxDim, *boxlinearVelocity, boxGravity, boxDensity, boxFriction, boxRestitution, true);
+				setupPlayer = true;
+			}
+			break;
+
+		case GLFW_KEY_KP_0:
+			if (key == GLFW_KEY_KP_0 && setupPlayer) {
+
+				b2Vec2 force = decomposeVector(90.0f, 3000.0f);
+				player->ApplyLinearImpulse(force, player->GetWorldCenter(), true);
+
+			}
+			break;
+
+		case GLFW_KEY_KP_6:
+			if (key == GLFW_KEY_KP_6 && setupPlayer) {
+
+				b2Vec2 force = decomposeVector(0.0f, 500.0f);
+				player->ApplyLinearImpulse(force, player->GetWorldCenter(), true);
+
+			}
+			break;
+
+		case GLFW_KEY_KP_4:
+			if (key == GLFW_KEY_KP_4 && setupPlayer) {
+
+				b2Vec2 force = decomposeVector(135.0f, 500.0f);
+				player->ApplyLinearImpulseToCenter(force, true);
+
+			}
+			break;
+
 		}
+
 
 	}
 
