@@ -32,7 +32,6 @@ private:
 
 public:
 	MyTest() {
-		//////////// EXERCÍCIO 7	
 		bool exercicio7 = false;
 		if (exercicio7) {
 			// Left Wall
@@ -61,7 +60,7 @@ public:
 		}
 		/////////
 
-		//Exercício 7
+		
 		bool criarParedes = true;
 		if (criarParedes) {
 
@@ -106,7 +105,6 @@ public:
 		return new MyTest;
 	}
 
-	// EXERCÍCIO 6 - Cubo
 	b2Body* createBox(b2Vec2 pos, b2Vec2 dim, b2Vec2 linearVelocity, float grav, float density, float friction, float restitution, bool isDynamic)
 	{
 		b2BodyDef bodyDef;
@@ -131,7 +129,6 @@ public:
 	}
 
 
-	// EXERCÍCIO 6 - Círculo
 	b2Body* createCircle(b2Vec2 pos, float radius, b2Vec2 linearVelocity, float grav, float density, float friction, float restitution, bool isDynamic)
 	{
 		b2BodyDef bodyDef;
@@ -157,7 +154,6 @@ public:
 		return body;
 	}
 
-	// EXERCÍCIO 6 - Linha
 	b2Body* createEdge(b2Vec2 p1, b2Vec2 p2)
 	{
 		b2Body* novoObjeto;
@@ -173,7 +169,6 @@ public:
 		return body;
 	}
 
-	//EXERCÍCIO 13 - "Pato" (Diamante)
 	b2Body* createDiamond(float posX, float posY, float scaleFactor)
 	{
 		b2Body* novoObjeto;
@@ -290,7 +285,6 @@ public:
 		return novoObjeto;
 	}
 
-	//exercíico 6 + 8 + 9
 	void Keyboard(int key) override
 	{
 
@@ -337,7 +331,6 @@ public:
 			}
 			break;
 
-			// Exercício 9
 		case GLFW_KEY_V:
 			if (key == GLFW_KEY_V) {
 				b2Vec2* boxPos = new b2Vec2(0, 0);
@@ -361,7 +354,6 @@ public:
 			}
 			break;
 
-			// Exercício 10
 		case GLFW_KEY_G:
 			if (key == GLFW_KEY_G) {
 
@@ -551,6 +543,7 @@ public:
 			}
 			break;
 
+			//LISTA 2 - EXERCÍCIO 2
 		case GLFW_KEY_KP_7:
 			if (key == GLFW_KEY_KP_7) {
 				b2Vec2* boxPos = new b2Vec2(0, -40);
